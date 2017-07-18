@@ -8,21 +8,23 @@
 // $("#contacts-list tbody")[0].innerHTML =row;
 
 
-function getRow(firstName, lastName, phone){
-    if (phone == undefined) {
-        phone = '';
-    }
-    If (typeof lastName == 'undefined'){
-        lastName = '';
-    }
-    If (firstName == undefined){
-        firstName ='';
-    }
-    firstName = firstName || '';
-    var row = '<tr><td>' + lastName + '</td><td>' + firstName +  '</td><td>' + phone + '</td></tr>';
-    return row ;
-}
-//
+// function getRow(firstName, lastName, phone){
+//     if (phone == undefined) {
+//         phone = '';
+//     }
+//     if (typeof lastName == 'undefined'){
+//         lastName = '';
+//     }
+//     if (firstName == undefined){
+//         firstName ='';
+//     }
+//     firstName = firstName || '';
+//     var row = '<tr><td>' + lastName + '</td><td>' + firstName +  '</td><td>' + phone + '</td>'+
+//         '<td>[<a href="date/remove.html">x</a>]</td>'+
+//         '</tr>';
+//     return row ;
+// }
+
 // var contacte = [
 //     ['Mihai', 'Pop', '0742179765'],
 //     ['Adriana', 'Pop', '0742179765'],
@@ -30,32 +32,45 @@ function getRow(firstName, lastName, phone){
 // ];
 //
 
-var contacte = [
-    {
-        firstName: 'Nicolae',
-        lastName: 'Matei',
-        phone: '01',
-    }, {
-        firstName: 'Iosif',
-        lastName: 'DelaCruz',
-        phone: '03',
-    }, {
-        firstName: 'Mihai',
-        lastName: 'Pop',
-        phone: '04'
-    }
-]
+
+
+
+
+var contacte = [];
+
+function getRow(contact){
+    var id = contact.id;
+    var phone = contact.phone ||'';
+    var lastName = contact.lastName || '';
+    var firstName = contact.firstName || '';
+
+    var row = '<tr><td>' + lastName + '</td><td>' + firstName +  '</td><td>' + phone + '</td>'+
+        '<td>[<a href="date/remove.html?id= '+id+' ">x</a>]</td>'+
+        '</tr>';
+    return row ;
+}
 
 var tableContent = '';
 
-for(var i=0; i<contacte.length; i++){
-    var contact = contacte[i];
-    tableContent += getRow(contact.firstName, contact.lastName, contact.phone);
+function createRow(contact){
+    tableContent += getRow(contact);
 }
 
+// for(var i=0; i<contacte.length; i++){
+//     createRow(contacte[i])
+// }
+
+$.ajax('date/contacte.json').done(function(contacte){
+   console.info('contacte', contacte);
+   contacte.forEach(createRow);
+   $("#contacts-list tbody").html (tableContent);
+});
 
 
-$("#contacts-list tbody").html (tableContent);
+
+
+
+
 
 
 // 1. convert from array of arrays into json
